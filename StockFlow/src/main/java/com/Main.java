@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Product product1 = new Product("BAC1", "Posta de Bacalhau", "CaixaMar", "Posta de Bacalhau 400-600", 18.5);
+        Product product1 = new Product("Posta de Bacalhau", "CaixaMar", "Posta de Bacalhau 400-600", 18.5, 5);
 
         IO.println(product1);
 

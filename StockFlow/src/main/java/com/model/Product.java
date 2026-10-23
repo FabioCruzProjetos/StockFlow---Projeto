@@ -2,8 +2,10 @@ package com.model;
 
 public class Product {
 
-    private final String id;
+    private static int idProducts = 1;
+
     private String name;
+    private final int id;
     private String supplier;
     private String description;
 
@@ -11,15 +13,22 @@ public class Product {
     private double actualStock;
     private double minimalStock;
 
-    public Product(String id, String name, String supplier,String description, double price, double actualStock, double minimalStock) {
+    public Product(String name, String supplier,String description, double price, double actualStock, double minimalStock) {
 
-        this.id = verifyString(id);
+        this.id = idProducts;
+        idProducts += 1;
         this.name = verifyString(name);
         this.supplier = verifyString(supplier);
         this.description = verifyString(description);
         this.price = verifyPrice(price);
         this.actualStock = verifyStock(actualStock);
         this.minimalStock = verifyStock(minimalStock);
+
+    }
+
+    public Product(String name, String supplier,String description, double price, double minimalStock) {
+
+        this(name,supplier,description,price,0,minimalStock);
 
     }
 
@@ -38,7 +47,7 @@ public class Product {
 
     private double verifyPrice(double priceToBeVerified) {
 
-        if (Double.isFinite(priceToBeVerified)) {
+        if (!Double.isFinite(priceToBeVerified)) {
             throw new IllegalArgumentException("Invalid Value");
         }
 
@@ -51,7 +60,7 @@ public class Product {
 
     private double verifyStock(double stockToBeVerified) {
 
-        if (Double.isFinite(stockToBeVerified)) {
+        if (!Double.isFinite(stockToBeVerified)) {
             throw new IllegalArgumentException("Invalid Value");
         }
 
@@ -66,7 +75,7 @@ public class Product {
         return name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
