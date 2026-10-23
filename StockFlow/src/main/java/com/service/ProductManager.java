@@ -1,0 +1,104 @@
+package com.service;
+
+import com.model.Product;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class ProductManager {
+
+    private List<Product> productsList;
+    private int maxProducts;
+
+    public ProductManager() {
+        this(200);
+    }
+
+    public ProductManager(int maxProducts) {
+
+        this.productsList = new ArrayList<>();
+        this.maxProducts = verifyMaxProducts(maxProducts);
+    }
+
+    private int verifyMaxProducts(int maxToBeVerified) {
+
+        if (maxToBeVerified <= 0) {
+            throw new IllegalArgumentException("Invalid Value");
+        }
+
+        return maxToBeVerified;
+    }
+
+    public void addProduct(Product product){
+
+        if (product == null) {
+            throw new IllegalArgumentException("Invalid Product");
+        }
+
+        if (productsList.size() >= maxProducts) {
+            throw new IllegalArgumentException("Full Capacity");
+        }
+
+        if (haveIDInList(product.getId())) {
+            throw new IllegalArgumentException("Already Have this ID");
+        }
+
+        productsList.add(product);
+    }
+
+    public boolean removeProductByID(int id) {
+
+        validateID(id);
+
+        Iterator<Product> i = productsList.iterator();
+
+        while (i.hasNext()) {
+            if (i.next().getId() == id) {
+                i.remove();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<Product> getProducts(){
+        return new ArrayList<>(productsList);
+    }
+
+    public Product getProductByID(int id) {
+
+        validateID(id);
+
+        for (Product product : productsList) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean haveIDInList(int id) {
+
+        validateID(id);
+
+        for (Product product : productsList) {
+            if (product.getId() == id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void validateID(int id) {
+
+        if (id <= 0) {
+            throw new IllegalArgumentException("Invalid ID");
+        }
+
+    }
+
+}
