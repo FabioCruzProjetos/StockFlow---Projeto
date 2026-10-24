@@ -2,17 +2,20 @@ package com.service;
 
 import com.model.Product;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class ProductManager {
 
+    private static final int maxProductByDefault = 200;
+
     private List<Product> productsList;
     private int maxProducts;
 
     public ProductManager() {
-        this(200);
+        this(maxProductByDefault);
     }
 
     public ProductManager(int maxProducts) {
@@ -101,4 +104,15 @@ public class ProductManager {
 
     }
 
+    public int getMaxProducts() {
+        return maxProducts;
+    }
+
+    public int getSize() {
+        return productsList.size();
+    }
+
+    public static int getMaxProductByDefault() {
+        return maxProductByDefault;
+    }
 }
