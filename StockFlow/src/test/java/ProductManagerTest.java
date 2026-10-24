@@ -1,5 +1,8 @@
 
 import com.model.Product;
+import com.model.exception.FullCapacityException;
+import com.model.exception.IDAlreadyInListException;
+import com.model.exception.InvalidIDException;
 import com.service.ProductManager;
 import org.junit.Test;
 
@@ -68,7 +71,7 @@ public class ProductManagerTest {
 
         productManager.addProduct(product);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IDAlreadyInListException.class, () -> {
             productManager.addProduct(product);
         });
 
@@ -88,7 +91,7 @@ public class ProductManagerTest {
 
         productManager1.addProduct(product1);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(FullCapacityException.class, () -> {
             productManager1.addProduct(product2);
         });
 
@@ -176,28 +179,28 @@ public class ProductManagerTest {
 
     @Test
     public void getProductByIdWithZeroThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidIDException.class, () -> {
             productManager.getProductByID(0);
         });
     }
 
     @Test
     public void getProductByIdWithNegativeIdThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidIDException.class, () -> {
             productManager.getProductByID(-12);
         });
     }
 
     @Test
     public void removeProductByIdWithZeroThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidIDException.class, () -> {
             productManager.removeProductByID(0);
         });
     }
 
     @Test
     public void removeProductByIdWithNegativeIdThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidIDException.class, () -> {
             productManager.removeProductByID(-12);
         });
     }

@@ -1,7 +1,11 @@
 package com.service;
 
 import com.model.Product;
+import com.model.exception.FullCapacityException;
+import com.model.exception.IDAlreadyInListException;
+import com.model.exception.InvalidIDException;
 
+import javax.sound.midi.InvalidMidiDataException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,11 +44,11 @@ public class ProductManager {
         }
 
         if (productsList.size() >= maxProducts) {
-            throw new IllegalArgumentException("Full Capacity");
+            throw new FullCapacityException("Full Capacity");
         }
 
         if (haveIDInList(product.getId())) {
-            throw new IllegalArgumentException("Already Have this ID");
+            throw new IDAlreadyInListException("Already Have this ID");
         }
 
         productsList.add(product);
@@ -99,7 +103,7 @@ public class ProductManager {
     private void validateID(int id) {
 
         if (id <= 0) {
-            throw new IllegalArgumentException("Invalid ID");
+            throw new InvalidIDException("Invalid ID");
         }
 
     }
