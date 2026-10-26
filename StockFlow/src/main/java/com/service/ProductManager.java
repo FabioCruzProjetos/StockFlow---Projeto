@@ -4,9 +4,8 @@ import com.model.Product;
 import com.model.exception.FullCapacityException;
 import com.model.exception.IDAlreadyInListException;
 import com.model.exception.InvalidIDException;
+import com.model.exception.ProductDontExistException;
 
-import javax.sound.midi.InvalidMidiDataException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +14,8 @@ public class ProductManager {
 
     private static final int maxProductByDefault = 200;
 
-    private List<Product> productsList;
-    private int maxProducts;
+    private final List<Product> productsList;
+    private final int maxProducts;
 
     public ProductManager() {
         this(maxProductByDefault);
@@ -84,7 +83,7 @@ public class ProductManager {
             }
         }
 
-        return null;
+        throw new ProductDontExistException("Product dont Exist");
     }
 
     private boolean haveIDInList(int id) {
