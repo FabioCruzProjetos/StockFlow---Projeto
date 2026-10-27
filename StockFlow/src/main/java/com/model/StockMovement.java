@@ -72,4 +72,9 @@ public class StockMovement {
     public LocalDateTime getDate() {
         return date;
     }
+
+    @Override
+    public String toString(){
+        return "Movement" + movementId + " " + productId + " " + quantity + " " + movementType.toString();
+    }
 }

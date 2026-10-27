@@ -3,6 +3,7 @@ import com.model.Product;
 import com.model.exception.FullCapacityException;
 import com.model.exception.IDAlreadyInListException;
 import com.model.exception.InvalidIDException;
+import com.model.exception.ProductDontExistException;
 import com.service.ProductManager;
 import org.junit.Test;
 
@@ -100,7 +101,9 @@ public class ProductManagerTest {
                 product1.getId(),
                 productManager1.getProductByID(product1.getId()).getId()
         );
-        assertNull(productManager1.getProductByID(product2.getId()));
+        assertThrows(ProductDontExistException.class, () -> {
+            productManager1.getProductByID(product2.getId());
+        });
     }
 
     @Test
@@ -151,7 +154,10 @@ public class ProductManagerTest {
                 product2.getId(),
                 productManager.getProductByID(product2.getId()).getId()
         );
-        assertNull(productManager.getProductByID(product3.getId()));
+
+        assertThrows(ProductDontExistException.class, () -> {
+            productManager.getProductByID(product3.getId());
+        });
     }
 
     @Test
@@ -174,7 +180,9 @@ public class ProductManagerTest {
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );
 
-        assertNull(productManager.getProductByID(product1.getId()));
+        assertThrows(ProductDontExistException.class, () -> {
+            productManager.getProductByID(product1.getId());
+        });
     }
 
     @Test
@@ -214,7 +222,11 @@ public class ProductManagerTest {
         productManager.addProduct(product1);
 
         assertTrue(productManager.removeProductByID(product1.getId()));
-        assertNull(productManager.getProductByID(product1.getId()));
+
+        assertThrows(ProductDontExistException.class, () -> {
+            productManager.getProductByID(product1.getId());
+        });
+
         assertEquals(0, productManager.getSize());
     }
 
