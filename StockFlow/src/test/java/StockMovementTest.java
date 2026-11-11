@@ -1,3 +1,4 @@
+
 import com.model.MovementType;
 import com.model.StockMovement;
 import com.model.exception.InvalidIDException;
@@ -7,129 +8,143 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-import static java.lang.Double.*;
 import static org.junit.Assert.*;
 
 public class StockMovementTest {
 
+    // Valid stock movement creation tests
+
     @Test
-    public void validStockMovementCreation(){
+    public void creatingValidStockMovement() {
+        // Act
+        StockMovement stockMovement =
+                new StockMovement(1, 10, MovementType.ADD);
 
-        StockMovement stockMovement = new StockMovement(1,10,MovementType.ADD);
-
-        assertEquals(1,stockMovement.getProductId());
-        assertEquals(10,stockMovement.getQuantity(), 0);
+        // Assert
+        assertEquals(1, stockMovement.getProductId());
+        assertEquals(10, stockMovement.getQuantity(), 0);
         assertEquals(MovementType.ADD, stockMovement.getMovementType());
         assertTrue(stockMovement.getMovementId() > 0);
-
     }
 
     @Test
-    public void differentStockMovementsHaveDifferentIDs(){
+    public void differentStockMovementsHaveDifferentIDs() {
+        // Arrange & Act
+        StockMovement firstMovement =
+                new StockMovement(1, 10, MovementType.ADD);
 
-        StockMovement stockMovement = new StockMovement(1,10,MovementType.ADD);
-        StockMovement stockMovement2 = new StockMovement(1,10,MovementType.REMOVE);
+        StockMovement secondMovement =
+                new StockMovement(1, 10, MovementType.REMOVE);
 
-        assertNotEquals(stockMovement.getMovementId(), stockMovement2.getMovementId());
-
+        // Assert
+        assertNotEquals(
+                firstMovement.getMovementId(),
+                secondMovement.getMovementId()
+        );
     }
 
     @Test
-    public void consecutiveMovementsHaveConsecutiveIDsAfterFailingOne(){
+    public void consecutiveMovementsHaveConsecutiveIDsAfterFailedCreation() {
+        // Arrange
+        StockMovement firstMovement =
+                new StockMovement(1, 10, MovementType.ADD);
 
+        // Act & Assert
+        assertThrows(InvalidIDException.class, () ->
+                new StockMovement(-12, 10, MovementType.ADD)
+        );
 
-        StockMovement stockMovement = new StockMovement(1,10,MovementType.ADD);
+        // Act
+        StockMovement secondMovement =
+                new StockMovement(1, 10, MovementType.REMOVE);
 
-        assertThrows(InvalidIDException.class, () -> {
-            new StockMovement(-12,10,MovementType.ADD);
-        });
+        // Assert
+        assertEquals(
+                firstMovement.getMovementId() + 1,
+                secondMovement.getMovementId()
+        );
+    }
 
-        StockMovement stockMovement2 = new StockMovement(1,10,MovementType.REMOVE);
+    // Product ID validation tests
 
-        assertEquals(stockMovement.getMovementId() + 1, stockMovement2.getMovementId());
+    @Test
+    public void creatingStockMovementWithNegativeProductIdThrowsException() {
+        assertThrows(InvalidIDException.class, () ->
+                new StockMovement(-1, 10, MovementType.ADD)
+        );
     }
 
     @Test
-    public void negativeProductIdsAreRejected(){
+    public void creatingStockMovementWithZeroProductIdThrowsException() {
+        assertThrows(InvalidIDException.class, () ->
+                new StockMovement(0, 10, MovementType.ADD)
+        );
+    }
 
-        assertThrows(InvalidIDException.class, () -> {
-            new StockMovement(-1,10,MovementType.ADD);
-        });
+    // Quantity validation tests
 
+    @Test
+    public void creatingStockMovementWithNegativeQuantityThrowsException() {
+        assertThrows(InvalidQuantityException.class, () ->
+                new StockMovement(1, -10, MovementType.ADD)
+        );
     }
 
     @Test
-    public void zeroProductIdIsRejected(){
-
-        assertThrows(InvalidIDException.class, () -> {
-            new StockMovement(0,10,MovementType.ADD);
-        });
-
+    public void creatingStockMovementWithZeroQuantityThrowsException() {
+        assertThrows(InvalidQuantityException.class, () ->
+                new StockMovement(1, 0, MovementType.ADD)
+        );
     }
 
     @Test
-    public void negativeQuantityIsRejected(){
-
-        assertThrows(InvalidQuantityException.class, () -> {
-            new StockMovement(1,-10,MovementType.ADD);
-        });
-
+    public void creatingStockMovementWithPositiveInfiniteQuantityThrowsException() {
+        assertThrows(InvalidQuantityException.class, () ->
+                new StockMovement(
+                        1, Double.POSITIVE_INFINITY, MovementType.ADD
+                )
+        );
     }
 
     @Test
-    public void zeroQuantityisRejected(){
-
-        assertThrows(InvalidQuantityException.class, () -> {
-            new StockMovement(1,0,MovementType.ADD);
-        });
-
+    public void creatingStockMovementWithNegativeInfiniteQuantityThrowsException() {
+        assertThrows(InvalidQuantityException.class, () ->
+                new StockMovement(
+                        1, Double.NEGATIVE_INFINITY, MovementType.ADD
+                )
+        );
     }
 
     @Test
-    public void positiveInfiniteQuantityIsRejected(){
-
-        assertThrows(InvalidQuantityException.class, () -> {
-            new StockMovement(1,POSITIVE_INFINITY,MovementType.ADD);
-        });
-
+    public void creatingStockMovementWithNaNQuantityThrowsException() {
+        assertThrows(InvalidQuantityException.class, () ->
+                new StockMovement(1, Double.NaN, MovementType.ADD)
+        );
     }
 
+    // Movement type validation tests
+
     @Test
-    public void negativeInfiniteQuantityIsRejected(){
-
-        assertThrows(InvalidQuantityException.class, () -> {
-           new StockMovement(1,NEGATIVE_INFINITY,MovementType.ADD);
-        });
-
+    public void creatingStockMovementWithNullMovementTypeThrowsException() {
+        assertThrows(InvalidMovementTypeException.class, () ->
+                new StockMovement(1, 1, null)
+        );
     }
 
-    @Test
-    public void nanQuantityisRejected(){
-
-        assertThrows(InvalidQuantityException.class, () -> {
-            new StockMovement(1,NaN,MovementType.ADD);
-        });
-
-    }
+    // Date tests
 
     @Test
-    public void nullMovementTypeIsRejected(){
-
-        assertThrows(InvalidMovementTypeException.class, () -> {
-            new StockMovement(1,1,null);
-        });
-
-    }
-
-    @Test
-    public void dateIsNotNull() {
-
+    public void creatingStockMovementAssignsCurrentDate() {
+        // Arrange
         LocalDateTime before = LocalDateTime.now();
 
-        StockMovement stockMovement = new StockMovement(1, 1, MovementType.ADD);
+        // Act
+        StockMovement stockMovement =
+                new StockMovement(1, 1, MovementType.ADD);
 
         LocalDateTime after = LocalDateTime.now();
 
+        // Assert
         assertNotNull(stockMovement.getDate());
         assertFalse(stockMovement.getDate().isBefore(before));
         assertFalse(stockMovement.getDate().isAfter(after));
