@@ -22,7 +22,7 @@ This project is being developed as a personal portfolio project to strengthen my
 | MySQL | Persistent data storage |
 | JDBC | Database connectivity |
 | Git and GitHub | Version control and project management |
-| JUnit | Automated testing, to be introduced during development |
+| JUnit 4 | Automated unit testing |
 
 *Technologies and tools will be integrated progressively throughout development.*
 
@@ -30,13 +30,13 @@ This project is being developed as a personal portfolio project to strengthen my
 
 ### 1. Product Management
 
-- Create products with a unique code, name, price, initial quantity, and minimum stock level.
+- Create products with an automatically generated unique ID, name, supplier, description, price, current stock, and minimum stock level.
 - View and list products.
 - Edit product information.
-- Search for products by code or name.
+- Search for products by ID or name.
 - Set minimum stock levels.
 - Deactivate products without deleting their movement history.
-- Validate input data and prevent duplicate product codes.
+- Validate input data and prevent duplicate product IDs.
 
 ### 2. Stock Control
 
@@ -50,7 +50,7 @@ This project is being developed as a personal portfolio project to strengthen my
 
 ### 3. Search, Filtering, and Sorting
 
-- Search by product code or name.
+- Search by product ID or name.
 - Filter active and inactive products.
 - Filter products with low stock.
 - Sort products by name, price, or quantity.
@@ -113,7 +113,7 @@ This is an indicative structure. The final organisation may change during develo
 
 The application must enforce the following rules:
 
-1. Each product must have a unique code.
+1. Each product must have a unique ID.
 2. Prices and stock quantities cannot be negative.
 3. The quantity recorded in a stock movement must be greater than zero.
 4. A stock exit cannot exceed the available quantity.
@@ -126,21 +126,35 @@ The application must enforce the following rules:
 The project will be developed in stages, allowing each technology to be learned and applied before moving on to the next.
 
 - [ ] **Phase 1 — Java:** implement the data models, business rules, and stock operations using in-memory data.
+  - [x] Product model and validation.
+  - [x] Product management.
+  - [x] Stock movement model.
+  - [x] Stock entry and exit operations.
+  - [x] Custom exception handling.
+  - [x] Unit tests for core classes using JUnit 4.
+  - [x] JavaDoc documentation for main classes.
+  - [ ] Console-based interface.
+
 - [ ] **Phase 2 — JavaFX:** build the graphical interface and connect it to the existing application logic.
 - [ ] **Phase 3 — MySQL and JDBC:** create the database and implement data persistence.
-- [ ] **Phase 4 — Testing:** validate features, fix bugs, and test edge cases.
+- [ ] **Phase 4 — Testing:** expand test coverage, fix bugs, and test edge cases.
 - [ ] **Phase 5 — Finalisation:** complete reports, improve documentation, and prepare a project demonstration.
 
 ## Testing and Code Quality
 
-Testing will be used throughout development to verify, among other things:
+Testing is used throughout development to verify the application's functionality and reliability.
 
-- The creation of valid products and rejection of duplicate product codes.
-- Price and quantity validation.
+Current unit tests cover:
+
+- The creation of valid products and rejection of invalid product data.
+- Price and stock quantity validation.
+- Product management operations.
 - Correct stock entry and exit operations.
 - Prevention of negative stock.
-- Data persistence after restarting the application.
-- Consistency between current stock levels and movement history.
+- Stock movement history.
+- Handling of invalid product IDs and quantities.
+
+Further tests will be added as new features are implemented, including database persistence and graphical interface interactions.
 
 ## Installation and Setup
 
@@ -165,9 +179,20 @@ Features such as supplier management, invoicing, sales management, multiple ware
 
 ## Project Status
 
-**In development.**
+**Phase 1 — Java: In progress.**
 
-This README describes the project's goals and planned features. It will be updated as features are implemented and tested.
+The core business logic has been implemented, including:
+
+- Product management and validation.
+- Stock entry and exit operations.
+- Stock movement history.
+- Custom exception handling.
+- Unit tests using JUnit 4.
+- JavaDoc documentation for the main classes.
+
+The next step is to complete the documentation and develop a console-based interface before moving on to JavaFX.
+
+This README will be updated as new features are implemented and tested.
 
 ## Author
 
