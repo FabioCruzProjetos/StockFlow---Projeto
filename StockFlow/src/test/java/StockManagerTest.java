@@ -15,8 +15,10 @@ import static org.junit.Assert.*;
 
 public class StockManagerTest {
 
+    // Constructor tests
+
     @Test
-    public void validStockManagerCreation() {
+    public void creatingValidStockManager() {
         ProductManager productManager = new ProductManager();
         StockManager stockManager = new StockManager(productManager);
 
@@ -24,22 +26,27 @@ public class StockManagerTest {
     }
 
     @Test
-    public void stockManagerDoesNotAcceptNull() {
+    public void creatingStockManagerWithNullProductManagerThrowsException() {
         assertThrows(IllegalArgumentException.class, () ->
                 new StockManager(null)
         );
     }
 
+    // Add stock tests
+
     @Test
-    public void addValidStock() {
+    public void addingValidStockUpdatesProductAndRecordsMovement() {
+        // Arrange
         ProductManager productManager = new ProductManager();
         Product product = new Product(" a ", " a ", " a ", 1, 10, 10);
         StockManager stockManager = new StockManager(productManager);
 
         productManager.addProduct(product);
 
+        // Act
         stockManager.addStock(product.getId(), 5);
 
+        // Assert
         assertEquals(15, product.getActualStock(), 0);
         assertEquals(1, stockManager.getStockMovementsHistory().size());
 
@@ -52,40 +59,45 @@ public class StockManagerTest {
     }
 
     @Test
-    public void addZeroStockIsRejected() {
+    public void addingZeroStockThrowsException() {
         assertInvalidAddQuantity(0);
     }
 
     @Test
-    public void addNegativeStockIsRejected() {
+    public void addingNegativeStockThrowsException() {
         assertInvalidAddQuantity(-5);
     }
 
     @Test
-    public void addPositiveInfiniteStockIsRejected() {
+    public void addingPositiveInfiniteStockThrowsException() {
         assertInvalidAddQuantity(Double.POSITIVE_INFINITY);
     }
 
     @Test
-    public void addNegativeInfiniteStockIsRejected() {
+    public void addingNegativeInfiniteStockThrowsException() {
         assertInvalidAddQuantity(Double.NEGATIVE_INFINITY);
     }
 
     @Test
-    public void addNaNStockIsRejected() {
+    public void addingNaNStockThrowsException() {
         assertInvalidAddQuantity(Double.NaN);
     }
 
+    // Remove stock tests
+
     @Test
-    public void removeValidStock() {
+    public void removingValidStockUpdatesProductAndRecordsMovement() {
+        // Arrange
         ProductManager productManager = new ProductManager();
         Product product = new Product(" a ", " a ", " a ", 1, 10, 10);
         StockManager stockManager = new StockManager(productManager);
 
         productManager.addProduct(product);
 
+        // Act
         stockManager.removeStock(product.getId(), 5);
 
+        // Assert
         assertEquals(5, product.getActualStock(), 0);
         assertEquals(1, stockManager.getStockMovementsHistory().size());
 
@@ -98,38 +110,40 @@ public class StockManagerTest {
     }
 
     @Test
-    public void removeZeroStockIsRejected() {
+    public void removingZeroStockThrowsException() {
         assertInvalidRemoveQuantity(0);
     }
 
     @Test
-    public void removeNegativeStockIsRejected() {
+    public void removingNegativeStockThrowsException() {
         assertInvalidRemoveQuantity(-5);
     }
 
     @Test
-    public void removePositiveInfiniteStockIsRejected() {
+    public void removingPositiveInfiniteStockThrowsException() {
         assertInvalidRemoveQuantity(Double.POSITIVE_INFINITY);
     }
 
     @Test
-    public void removeNegativeInfiniteStockIsRejected() {
+    public void removingNegativeInfiniteStockThrowsException() {
         assertInvalidRemoveQuantity(Double.NEGATIVE_INFINITY);
     }
 
     @Test
-    public void removeNaNStockIsRejected() {
+    public void removingNaNStockThrowsException() {
         assertInvalidRemoveQuantity(Double.NaN);
     }
 
     @Test
-    public void removeQuantityGreaterThanActualStockIsRejected() {
+    public void removingMoreStockThanAvailableThrowsException() {
+        // Arrange
         ProductManager productManager = new ProductManager();
         Product product = new Product(" a ", " a ", " a ", 1, 10, 10);
         StockManager stockManager = new StockManager(productManager);
 
         productManager.addProduct(product);
 
+        // Act & Assert
         assertThrows(InsufficientStockException.class, () ->
                 stockManager.removeStock(product.getId(), 20)
         );
@@ -138,8 +152,10 @@ public class StockManagerTest {
         assertTrue(stockManager.getStockMovementsHistory().isEmpty());
     }
 
+    // Invalid product ID tests
+
     @Test
-    public void addStockToInvalidProductIdIsRejected() {
+    public void addingStockToNonExistentProductThrowsException() {
         ProductManager productManager = new ProductManager();
         StockManager stockManager = new StockManager(productManager);
 
@@ -151,7 +167,7 @@ public class StockManagerTest {
     }
 
     @Test
-    public void removeStockFromInvalidProductIdIsRejected() {
+    public void removingStockFromNonExistentProductThrowsException() {
         ProductManager productManager = new ProductManager();
         StockManager stockManager = new StockManager(productManager);
 
@@ -163,7 +179,7 @@ public class StockManagerTest {
     }
 
     @Test
-    public void getHistoryOfInvalidProductIdIsRejected() {
+    public void gettingHistoryOfNonExistentProductThrowsException() {
         ProductManager productManager = new ProductManager();
         StockManager stockManager = new StockManager(productManager);
 
@@ -172,23 +188,29 @@ public class StockManagerTest {
         );
     }
 
+    // Stock movement history tests
+
     @Test
-    public void emptyHistoryIsReturnedWhenProductHasNoMovements() {
+    public void gettingHistoryOfProductWithoutMovementsReturnsEmptyList() {
+        // Arrange
         ProductManager productManager = new ProductManager();
         Product product = new Product(" a ", " a ", " a ", 1, 10, 10);
         StockManager stockManager = new StockManager(productManager);
 
         productManager.addProduct(product);
 
+        // Act
         List<StockMovement> history =
                 stockManager.getStockMovementsHistoryOfProduct(product.getId());
 
+        // Assert
         assertNotNull(history);
         assertTrue(history.isEmpty());
     }
 
     @Test
-    public void stockManagerReturnsHistoryInCorrectOrder() {
+    public void stockMovementHistoryIsReturnedInCorrectOrder() {
+        // Arrange
         ProductManager productManager = new ProductManager();
 
         Product product1 = new Product(" a ", " a ", " a ", 1, 10, 10);
@@ -199,6 +221,7 @@ public class StockManagerTest {
         productManager.addProduct(product1);
         productManager.addProduct(product2);
 
+        // Act
         stockManager.addStock(product2.getId(), 10);
         stockManager.removeStock(product1.getId(), 3);
         stockManager.addStock(product1.getId(), 5);
@@ -206,6 +229,7 @@ public class StockManagerTest {
         List<StockMovement> history =
                 stockManager.getStockMovementsHistory();
 
+        // Assert
         assertEquals(3, history.size());
 
         assertEquals(product2.getId(), history.get(0).getProductId());
@@ -225,7 +249,8 @@ public class StockManagerTest {
     }
 
     @Test
-    public void stockManagerReturnsOnlyHistoryOfRequestedProduct() {
+    public void gettingProductHistoryReturnsOnlyItsMovements() {
+        // Arrange
         ProductManager productManager = new ProductManager();
 
         Product product1 = new Product(" a ", " a ", " a ", 1, 10, 10);
@@ -240,9 +265,11 @@ public class StockManagerTest {
         stockManager.removeStock(product1.getId(), 3);
         stockManager.addStock(product1.getId(), 5);
 
+        // Act
         List<StockMovement> history =
                 stockManager.getStockMovementsHistoryOfProduct(product1.getId());
 
+        // Assert
         assertEquals(2, history.size());
 
         for (StockMovement movement : history) {
@@ -255,6 +282,7 @@ public class StockManagerTest {
 
     @Test
     public void modifyingReturnedHistoryDoesNotChangeInternalHistory() {
+        // Arrange
         ProductManager productManager = new ProductManager();
         Product product = new Product(" a ", " a ", " a ", 1, 10, 10);
         StockManager stockManager = new StockManager(productManager);
@@ -262,13 +290,17 @@ public class StockManagerTest {
         productManager.addProduct(product);
         stockManager.addStock(product.getId(), 5);
 
+        // Act
         List<StockMovement> returnedHistory =
                 stockManager.getStockMovementsHistory();
 
         returnedHistory.clear();
 
+        // Assert
         assertEquals(1, stockManager.getStockMovementsHistory().size());
     }
+
+    // Helper methods
 
     private void assertInvalidAddQuantity(double quantity) {
         ProductManager productManager = new ProductManager();

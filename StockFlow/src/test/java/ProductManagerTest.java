@@ -1,9 +1,6 @@
 
 import com.model.Product;
-import com.model.exception.FullCapacityException;
-import com.model.exception.IDAlreadyInListException;
-import com.model.exception.InvalidIDException;
-import com.model.exception.ProductDontExistException;
+import com.model.exception.*;
 import com.service.ProductManager;
 import org.junit.Test;
 
@@ -29,14 +26,14 @@ public class ProductManagerTest {
 
     @Test
     public void createProductManagerWithZeroCapacityThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidQuantityException.class, () -> {
             new ProductManager(0);
         });
     }
 
     @Test
     public void createProductManagerWithNegativeCapacityThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(InvalidQuantityException.class, () -> {
             new ProductManager(-150);
         });
     }

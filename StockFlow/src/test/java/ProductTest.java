@@ -1,5 +1,6 @@
 
 import com.model.Product;
+import com.model.exception.InvalidQuantityException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -146,21 +147,21 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithNegativePriceThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product("Bacalhau", "Ibergloria", "Posta", -15, 12, 7)
         );
     }
 
     @Test
     public void creatingProductWithZeroPriceThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product("Bacalhau", "Ibergloria", "Posta", 0, 12, 7)
         );
     }
 
     @Test
     public void creatingProductWithNaNPriceThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         Double.NaN, 12, 7
@@ -170,7 +171,7 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithInfinitePriceThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         Double.POSITIVE_INFINITY, 12, 7
@@ -182,14 +183,14 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithNegativeActualStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product("Bacalhau", "Ibergloria", "Posta", 15, -12, 7)
         );
     }
 
     @Test
     public void creatingProductWithNaNActualStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, Double.NaN, 7
@@ -199,7 +200,7 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithPositiveInfiniteActualStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, Double.POSITIVE_INFINITY, 7
@@ -209,7 +210,7 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithNegativeInfiniteActualStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, Double.NEGATIVE_INFINITY, 7
@@ -221,14 +222,14 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithNegativeMinimalStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product("Bacalhau", "Ibergloria", "Posta", 15, 12, -7)
         );
     }
 
     @Test
     public void creatingProductWithNaNMinimalStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, 12, Double.NaN
@@ -238,7 +239,7 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithPositiveInfiniteMinimalStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, 12, Double.POSITIVE_INFINITY
@@ -248,7 +249,7 @@ public class ProductTest {
 
     @Test
     public void creatingProductWithNegativeInfiniteMinimalStockThrowsException() {
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(InvalidQuantityException.class, () ->
                 new Product(
                         "Bacalhau", "Ibergloria", "Posta",
                         15, 12, Double.NEGATIVE_INFINITY
