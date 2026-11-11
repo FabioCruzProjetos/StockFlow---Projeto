@@ -15,6 +15,8 @@ public class ProductManagerTest {
 
     private final ProductManager productManager = new ProductManager();
 
+    // Constructor tests
+
     @Test
     public void createProductManagerWithDefaultCapacity() {
         ProductManager productManager2 = new ProductManager();
@@ -45,6 +47,8 @@ public class ProductManagerTest {
 
         assertEquals(150, productManager2.getMaxProducts());
     }
+
+    // Add product tests
 
     @Test
     public void addValidProduct() {
@@ -81,36 +85,44 @@ public class ProductManagerTest {
 
     @Test
     public void addProductWhenCapacityIsFullThrowsException() {
+        // Arrange
         ProductManager productManager1 = new ProductManager(1);
 
         Product product1 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 16.5, 10
         );
+
         Product product2 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 400-600", 16.5, 10
         );
 
         productManager1.addProduct(product1);
 
+        // Act & Assert
         assertThrows(FullCapacityException.class, () -> {
             productManager1.addProduct(product2);
         });
 
         assertEquals(1, productManager1.getSize());
+
         assertEquals(
                 product1.getId(),
                 productManager1.getProductByID(product1.getId()).getId()
         );
+
         assertThrows(ProductDontExistException.class, () -> {
             productManager1.getProductByID(product2.getId());
         });
     }
+
+    // Get products tests
 
     @Test
     public void getProductsReturnsAllAddedProducts() {
         Product product1 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );
+
         Product product2 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 400-600", 15, 10
         );
@@ -130,9 +142,11 @@ public class ProductManagerTest {
         Product product1 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );
+
         Product product2 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 400-600", 15, 10
         );
+
         Product product3 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 200-600", 12, 12
         );
@@ -150,6 +164,7 @@ public class ProductManagerTest {
                 product1.getId(),
                 productManager.getProductByID(product1.getId()).getId()
         );
+
         assertEquals(
                 product2.getId(),
                 productManager.getProductByID(product2.getId()).getId()
@@ -159,6 +174,33 @@ public class ProductManagerTest {
             productManager.getProductByID(product3.getId());
         });
     }
+
+    @Test
+    public void getProductsReturnsReferencesToOriginalProducts() {
+        // Arrange
+        Product product = new Product(
+                "Bacalhau",
+                "Ibergloria",
+                "Bacalhau Posta 400-600",
+                16.5,
+                10
+        );
+
+        productManager.addProduct(product);
+
+        // Act
+        List<Product> products = productManager.getProducts();
+        products.get(0).setPrice(20);
+
+        // Assert
+        assertEquals(
+                20,
+                productManager.getProductByID(product.getId()).getPrice(),
+                0.001
+        );
+    }
+
+    // Get product by ID tests
 
     @Test
     public void getProductByIdReturnsProduct() {
@@ -175,7 +217,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    public void getProductByIdReturnsNullWhenProductDoesNotExist() {
+    public void getProductByIdThrowsExceptionWhenProductDoesNotExist() {
         Product product1 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );
@@ -198,6 +240,8 @@ public class ProductManagerTest {
             productManager.getProductByID(-12);
         });
     }
+
+    // Remove product tests
 
     @Test
     public void removeProductByIdWithZeroThrowsException() {
@@ -244,6 +288,7 @@ public class ProductManagerTest {
         Product product1 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );
+
         Product product2 = new Product(
                 "Bacalhau", "Ibergloria", "Bacalhau Posta 300-600", 10, 15
         );

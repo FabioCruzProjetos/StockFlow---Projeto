@@ -1,6 +1,8 @@
 
 package com.model;
 
+import com.model.exception.InvalidQuantityException;
+
 /**
  * Represents a product in the stock management system.
  * Stores product information, including its name, supplier,
@@ -32,7 +34,7 @@ public class Product {
      * @param actualStock the initial stock quantity, which must be finite and non-negative
      * @param minimalStock the minimum stock level, which must be finite and non-negative
      * @throws IllegalArgumentException if a string is null or blank,
-     * or if a numeric value violates its validation rules
+     * @throws InvalidQuantityException if a numeric value violates its validation rules
      */
     public Product(String name, String supplier, String description,
                    double price, double actualStock, double minimalStock) {
@@ -57,7 +59,7 @@ public class Product {
      * @param price the product price, which must be finite and greater than zero
      * @param minimalStock the minimum stock level, which must be finite and non-negative
      * @throws IllegalArgumentException if a string is null or blank,
-     * or if a numeric value violates its validation rules
+     * @throws InvalidQuantityException if a numeric value violates its validation rules
      */
     public Product(String name, String supplier, String description,
                    double price, double minimalStock) {
@@ -84,12 +86,12 @@ public class Product {
      *
      * @param priceToBeVerified the price to validate
      * @return the validated price
-     * @throws IllegalArgumentException if the price is not finite
+     * @throws InvalidQuantityException if the price is not finite
      * or is less than or equal to zero
      */
     private double verifyPrice(double priceToBeVerified) {
         if (!Double.isFinite(priceToBeVerified) || priceToBeVerified <= 0) {
-            throw new IllegalArgumentException("Price must be finite and greater than zero");
+            throw new InvalidQuantityException("Price must be finite and greater than zero");
         }
 
         return priceToBeVerified;
@@ -100,11 +102,11 @@ public class Product {
      *
      * @param stockToBeVerified the stock value to validate
      * @return the validated stock value
-     * @throws IllegalArgumentException if the value is not finite or is negative
+     * @throws InvalidQuantityException if the value is not finite or is negative
      */
     private double verifyStock(double stockToBeVerified) {
         if (!Double.isFinite(stockToBeVerified) || stockToBeVerified < 0) {
-            throw new IllegalArgumentException("Stock must be finite and non-negative");
+            throw new InvalidQuantityException("Stock must be finite and non-negative");
         }
 
         return stockToBeVerified;
@@ -189,7 +191,7 @@ public class Product {
      * Updates the product price.
      *
      * @param price the new product price, which must be finite and greater than zero
-     * @throws IllegalArgumentException if the price is not finite
+     * @throws InvalidQuantityException if the price is not finite
      * or is less than or equal to zero
      */
     public void setPrice(double price) {
@@ -209,7 +211,7 @@ public class Product {
      * Updates the current stock quantity.
      *
      * @param actualStock the new stock quantity, which must be finite and non-negative
-     * @throws IllegalArgumentException if the value is not finite or is negative
+     * @throws InvalidQuantityException if the value is not finite or is negative
      */
     public void setActualStock(double actualStock) {
         this.actualStock = verifyStock(actualStock);
@@ -228,7 +230,7 @@ public class Product {
      * Updates the minimum stock level.
      *
      * @param minimalStock the new minimum stock level, which must be finite and non-negative
-     * @throws IllegalArgumentException if the value is not finite or is negative
+     * @throws InvalidQuantityException if the value is not finite or is negative
      */
     public void setMinimalStock(double minimalStock) {
         this.minimalStock = verifyStock(minimalStock);
